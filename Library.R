@@ -16,6 +16,7 @@ matrix.ext <- function(matrix,x_ext=2,y_ext=2){
 }
 # Get total cell number for given neighborhood
 get.total.num <- function(a = 5,b = 3){
+  # a is axis in x direction; b is axis in y direction
   test <- matrix(1,2*a+1,2*b+1)
   for(i in 1:(2*a+1)){
     for(j in 1:(2*b+1)){
@@ -26,6 +27,28 @@ get.total.num <- function(a = 5,b = 3){
     }
   }
   return(sum(test))
+}
+# Get number of occupied cells in a neiborhood
+get.oval.r <- function(matrix_ext,x_ext,y_ext,
+                       x,y,a=5,b=3,
+                       skewx = 0,
+                       skewy = 0,which=1){
+  x1 <- x + x_ext + skewx
+  y1 <- y + y_ext + skewy
+  #c  <- sqrt(a^2-b^2)
+  matrix_cut <- matrix_ext[(x1-a):(x1+a),(y1-b):(y1+b)]
+  for(i in 1:(2*a+1)){
+    for(j in 1:(2*b+1)){
+      if(((i-a-1)^2)/(a^2) + ((j-b-1)^2)/(b^2) > 1 ){ 
+        #sqrt((i-(a+1+c))^2+(j-b-1)^2) + 
+        # sqrt((i-(a+1-c))^2+(j-b-1)^2) 
+        #  > 2*a ){
+        matrix_cut[i,j] <- NA
+      }
+    }
+  }
+  result <- sum(matrix_cut==which,na.rm=T)
+  return(result)
 }
 # Main function for states updating
 next_step <- function(states,
@@ -47,7 +70,7 @@ next_step <- function(states,
   speed <- growth * deltat
   for(i in 1:d_x){
     for(j in 1:d_y){
-      skewxs= sample(size=1,x=c(-skewx,skewx),prob=c(0.5,0.5))
+      skewxs= sample(size=1,x=c(-skewx,skewx),prob=c(0.5,0.5)) # Runoff blockage 
       num0 <- get.oval.r(matrix_ext = states_ext,x_ext = a+b+skewm,y_ext = a+b+skewm,
                          x = i,y = j,a=a,b=b,skewx=skewxs,skewy = skewy,which = 0)
       num1 <- num_all - num0
@@ -95,21 +118,3 @@ automata.plot <- function(a,main="automata"){
     scale_y_continuous(expand = c(0,0)) +
     scale_x_continuous(expand = c(0,0))
 }
-
-#################################################################
-# Example
-#################################################################
-matrix_ini <- matrix(rbinom(2500, size=1, prob=0.01),50,50)
-matrix_temp <- matrix_ini
-num_all <- get.total.num(6,6)
-for(i in 1:200){matrix_temp <- next_step(matrix_temp,
-                                         alpha = 70,
-                                         beta = 35,
-                                         deltat = 0.5,
-                                         growth = 2,
-                                         num_all = num_all,
-                                         a = 6,
-                                         b = 6,
-                                         skewx=0,
-                                         skewy=0)}
-automata.plot(matrix_temp)

@@ -1,7 +1,7 @@
 # Source code for article "Regular pattern formation regulates population dynamics: logistic growth in cellular automata"
 
 ## Introduction
-Regular pattern formation is common in nature, but its ecological role in population dynamics is not well understood. In the article, we present a logistic probabilistic cellular automata (LPCA) model that combines a basic logistic growth model with two-dimensional spatial dynamics to simulate regular pattern formation. The code is consist of two parts 1) library that archives the basic functions; 2)example that shows some simple cases with parameters in article. Detail usages see source code annotation.
+Regular pattern formation is common in nature, but its ecological role in population dynamics is not well understood. In the article, we present a logistic probabilistic cellular automata (LPCA) model that combines a basic logistic growth model with two-dimensional spatial dynamics to simulate regular pattern formation. The code is consist of two parts 1) library that archives the basic functions; 2) example that shows some simple cases with parameters in article. Detail usages see source code annotation.
 
 ## authorship and E-mail
 Jingyao Sun: 
